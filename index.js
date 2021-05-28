@@ -2,7 +2,7 @@ const express = require('express')
 var cors = require('cors')
 require('dotenv').config()
 
-var bodyParser = require('body-parser')
+// var bodyParser = require('body-parser')
 const app = express()
 app.set('view engine', 'ejs');
 path = require("path");
@@ -53,7 +53,7 @@ app.post('/', (req, res) => {
     console.log("post")
 })
 
-app.use(userRoutes);
+// app.use(userRoutes);
 // app.use(roleRoutes);
 
 
