@@ -15,8 +15,7 @@ module.exports = (sequelize) => {
 		},
 		email: {
 			type: Sequelize.STRING,
-			allowNull: false,
-			unique: true
+			allowNull: false
 		},
 		district_id: {
 			type: Sequelize.INTEGER
