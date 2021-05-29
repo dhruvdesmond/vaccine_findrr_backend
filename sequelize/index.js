@@ -12,13 +12,16 @@ const { Sequelize } = require('sequelize');
 // 	benchmark: true
 // });
 const sequelize = new Sequelize(process.env.DB_Name, process.env.DB_USER,process.env.DB_PASS, {
-    host: 'localhost',
+    host: 'us-cdbr-east-04.cleardb.com',
     dialect: 'mysql',
 	logQueryParameters: true,
 	benchmark: true
 });
+
 const modelDefiners = [
 	require('./models/user.js'),
+	require('./models/notifier'),
+
 	// require('./models/user_role_mappings'),
 
 	// Add more models here...
