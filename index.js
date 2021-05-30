@@ -11,7 +11,8 @@ path = require("path");
 app.use(express.urlencoded());
 const moment = require('moment')
 var cron = require('node-cron');
-
+var validator = require("email-validator");
+ 
 app.use(express.json());
 app.use(cors())
 const nodemailer = require("nodemailer");
@@ -96,6 +97,8 @@ app.post("/notifications", upload.none(), async (req, res) => {
 			if (notifier) {
 				return res.status(400).json({ error: "Notifaction already exists" })
 			}
+			validator.validate(curr_email);
+
 			models.notifier.create({
 				email: curr_email,
 				district_id: curr_district_id,
