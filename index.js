@@ -147,7 +147,10 @@ app.get("/practise", async (req, res) => {
 	today = dd + '-' + mm + '-' + yyyy;
 	let url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + "505" + "&date=" + today
 	console.log("url --->>>",url)
-	await axios.get(url)
+	await axios.get(url,{
+		headers: { 'X-Requested-With': 'XMLHttpRequest'},
+		withCredentials: true
+	   })
 		.then(response => {
 			// let total_vaccine = 0
 			const arr = response['data']['sessions']
