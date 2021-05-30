@@ -149,7 +149,9 @@ app.get("/practise", async (req, res) => {
 	console.log("url --->>>",url)
 	await axios.get(url,{
 		headers: { 'X-Requested-With': 'XMLHttpRequest'},
-		withCredentials: true
+		withCredentials: true,
+		'accept': 'application/json',
+    	'Accept-Language': 'hi_IN'
 	   })
 		.then(response => {
 			// let total_vaccine = 0
