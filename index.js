@@ -129,119 +129,17 @@ app.post("/notifications/unsubscribe", upload.none(), async (req, res) => {
 			return res.status(400).json({ error: err })
 		})
 });
-const findDistrictInDb = () => {
-	models.notifier.findAll()
-}
-
-
-const initialize_nodemailer = () => {
-	const transporter = nodemailer.createTransport({
-		service: 'gmail',
-		auth: {
-			user: process.env.E_NAME,
-			pass: process.env.E_PASS
-		}
-	});
-}
-initialize_nodemailer()
-const sendMailFunc = async (email,district_name) => {
-	console.log("sendMailFunc")
-	console.log(email,district_name)
-	let mailOptions = {
-		from: process.env.E_NAME,
-		to: email,
-		subject: 'Vaccine available',
-		text: 'Hi /n Vaccine is now available at distirct code ->  '+ district_name,
-	};
-	await transporter.sendMail(mailOptions, function (error, info) {
-		if (error) {
-			console.log(error);
-		} else {
-			console.log('Email sent: ' + info.response);
-		}
-	});
-}
-
-
-const getAllDistrictsWithSubscribe = async () => {
-	const districts = await models.notifier.findAll({
-		where: {
-			updatedAt: {
-				[Op.gte]: moment().subtract(1, 'days').toDate()
-			},
-			is_subscribed: true
-
-		}
-	})
-		.then((notifications) => {
-
-			const districts = {}
-			notifications.map((notification) => {
-				if (!(notification.district_id in districts)) {
-					districts[notification.district_id] = {email:notification.email,district_name:notification.district_name}
-					
-				}
-			})
-			
-			console.log("display all districts ----------------------")
-
-			console.log(districts)
-			return districts
-		})
-		.catch(err => {
-			console.log("errorr -->>> ", err)
-			return err
-		})
-	return districts
-}
-
-const start_cron_job = async () => {
-	console.log("=======  start_cron_job =======")
-	const district_ids = await getAllDistrictsWithSubscribe()
-	console.log("start -----------------------")
-	console.log(district_ids)
-
-	for (const property in district_ids) {
-		const val = await isVaccineAvail(property)
-		if(val == true){
-			sendMailFunc(district_ids[property]['email'],district_ids[property]['district_name'])
-
-		}
-	}
-
-}
-// start_cron_job()
-const isVaccineAvail = async (district_id) => {
-	let today = new Date();
-	const dd = String(today.getDate()).padStart(2, '0');
-	const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-	const yyyy = today.getFullYear();
-	today = dd + '-' + mm + '-' + yyyy;
-	let url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + district_id + "&date=" + today
-	console.log("url",url)
-	const vaccineAvail = await axios.get(url)
-		.then(response => {
-			let total_vaccine = 0
-			const arr = response['data']['sessions']
-			arr.forEach((center) =>{
-				total_vaccine += center['available_capacity_dose1']
-			})
-			if(total_vaccine > 0){
-				return true
-			}
-			return false
-		})
-		.catch(error => {
-			console.log(error);
-			return false
-		});
-	return vaccineAvail
-}
+// const findDistrictInDb = () => {
+// 	models.notifier.findAll()
+// }
 
 
 
-cron.schedule('* */6 * * *', () => {
-	console.log('running a task every two minutes');
-	start_cron_job()
-  });
+
+
+
+// cron.schedule('* */6 * * *', () => {
+// 	console.log('running a task every two minutes');
+	
+//   });
 

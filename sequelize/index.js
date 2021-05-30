@@ -11,7 +11,8 @@ const { Sequelize } = require('sequelize');
 // 	logQueryParameters: true,
 // 	benchmark: true
 // });
-const sequelize = new Sequelize(process.env.DB_Name, process.env.DB_USER,process.env.DB_PASS, {
+console.log(process.env.DB_USER)
+const sequelize = new Sequelize("heroku_6eec06251a21929", "bbc3b6a25c43d7","498bc20f", {
     host: 'us-cdbr-east-04.cleardb.com',
     dialect: 'mysql',
 	logQueryParameters: true,
