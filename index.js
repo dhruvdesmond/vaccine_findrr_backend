@@ -88,12 +88,13 @@ app.post("/notifications", upload.none(), async (req, res) => {
 	const curr_district_name = req.body.district_name
 	models.notifier.findOne({
 		where: {
-			email: curr_email
+			email: curr_email,
+			district_id: curr_district_id
 		}
 	})
 		.then(notifier => {
 			if (notifier) {
-				return res.status(400).json({ error: "Email already exists" })
+				return res.status(400).json({ error: "Notifaction already exists" })
 			}
 			models.notifier.create({
 				email: curr_email,
