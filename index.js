@@ -97,19 +97,24 @@ app.post("/notifications", upload.none(), async (req, res) => {
 			if (notifier) {
 				return res.status(400).json({ error: "Notifaction already exists" })
 			}
-			validator.validate(curr_email);
+			if(validator.validate(curr_email)){
+				models.notifier.create({
+					email: curr_email,
+					district_id: curr_district_id,
+					district_name: curr_district_name
+				})
+					.then(notifier => {
+						return res.status(200).json({ "message": "notification created!!" })
+					})
+					.catch(err => {
+						return res.status(400).json({ error: err })
+					})
+			}
+			else{
+				return res.status(400).json({ error: "wrong email" })
+			}
 
-			models.notifier.create({
-				email: curr_email,
-				district_id: curr_district_id,
-				district_name: curr_district_name
-			})
-				.then(notifier => {
-					return res.status(200).json({ "message": "notification created!!" })
-				})
-				.catch(err => {
-					return res.status(400).json({ error: err })
-				})
+			
 		})
 		.catch(err => {
 			return res.status(400).json({ error: err })
