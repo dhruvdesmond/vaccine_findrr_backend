@@ -138,9 +138,28 @@ app.post("/notifications/unsubscribe", upload.none(), async (req, res) => {
 			return res.status(400).json({ error: err })
 		})
 });
-// const findDistrictInDb = () => {
-// 	models.notifier.findAll()
-// }
+
+app.get("/practise", async (req, res) => {
+	let today = new Date();
+	const dd = String(today.getDate()).padStart(2, '0');
+	const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	const yyyy = today.getFullYear();
+	today = dd + '-' + mm + '-' + yyyy;
+	let url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + "505" + "&date=" + today
+	console.log("url --->>>",url)
+	await axios.get(url)
+		.then(response => {
+			// let total_vaccine = 0
+			const arr = response['data']['sessions']
+
+			res.json({arr: arr})
+		})
+		.catch(error => {
+			console.log(error);
+			res.json({error : error})
+		});
+	
+});
 
 
 

@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(cors())
 // const nodemailer = require("nodemailer");
 
-const PORT = process.env.PORT;
+const PORT = 3002;
 // const sequelize = require('./sequelize');
 // const { Op } = require('sequelize')
 
@@ -142,7 +142,7 @@ const isVaccineAvail = async (district_id) => {
 	const yyyy = today.getFullYear();
 	today = dd + '-' + mm + '-' + yyyy;
 	let url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + district_id + "&date=" + today
-	console.log("url",url)
+	console.log("url --->>>",url)
 	const vaccineAvail = await axios.get(url)
 		.then(response => {
 			let total_vaccine = 0
